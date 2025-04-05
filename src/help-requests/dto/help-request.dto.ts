@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HelpRequestStatus } from '@prisma/client';
+import { HelpRequestStatus, HelpRequestType } from '@prisma/client';
 
 export class HelpRequestDto {
 	@ApiProperty({
@@ -26,6 +26,12 @@ export class HelpRequestDto {
 		required: false,
 	})
 	volunteerId?: number;
+
+	@ApiProperty({
+		description: 'Current status of the help request',
+		enum: HelpRequestType,
+	})
+	type: HelpRequestType;
 
 	@ApiProperty({
 		description: 'Current status of the help request',

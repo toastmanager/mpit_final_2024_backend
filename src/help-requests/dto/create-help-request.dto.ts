@@ -1,26 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsInt } from 'class-validator';
-import { HelpRequestStatus } from '@prisma/client';
+import { HelpRequestType } from '@prisma/client';
+import { IsString } from 'class-validator';
 
 export class CreateHelpRequestDto {
 	@ApiProperty({
 		description: 'Help request text content',
-		example: 'I need help with my homework in mathematics',
+		example: 'I need help with something',
 	})
 	@IsString()
 	text: string;
 
 	@ApiProperty({
-		description: 'ID of the user who creates the request',
-		example: 1,
+		description: 'Initial type of the help request',
+		enum: HelpRequestType,
 	})
-	@IsInt()
-	requesterId: number;
-
-	@ApiProperty({
-		description: 'Initial status of the help request',
-		enum: HelpRequestStatus,
-		default: HelpRequestStatus.ON_CONSIDERATION,
-	})
-	status?: HelpRequestStatus;
+	type: HelpRequestType;
 }

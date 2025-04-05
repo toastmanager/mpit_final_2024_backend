@@ -6,6 +6,7 @@ import {
 	Patch,
 	Param,
 	Delete,
+	Request,
 	UseGuards,
 	NotFoundException,
 } from '@nestjs/common';
@@ -26,9 +27,20 @@ export class HelpRequestsController {
 	@ApiOkResponse({
 		type: HelpRequestDto,
 	})
-	async create(@Body() createHelpRequestDto: CreateHelpRequestDto) {
+	async create(
+		@Request() req: any,
+		@Body() createHelpRequestDto: CreateHelpRequestDto,
+	) {
+		const { user } = req;
 		const helpRequest = await this.helpRequestsService.create({
-			data: createHelpRequestDto,
+			data: {
+				...createHelpRequestDto,
+				requester: {
+					connect: {
+						id: user.sub,
+					},
+				},
+			},
 		});
 		const helpRequestDto =
 			await this.helpRequestsService.getHelpRequestDto(helpRequest);

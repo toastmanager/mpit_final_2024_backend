@@ -6,10 +6,21 @@ model HelpRequest {
     requesterId Int               @map("requester_id")
     volunteer   User?             @relation("VolunteerRequests", fields: [volunteerId], references: [id])
     volunteerId Int?              @map("volunteer_id")
+    type        HelpRequestType
     status      HelpRequestStatus @default(ON_CONSIDERATION)
 
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+enum HelpRequestType {
+    MATERIAL
+    MEDICAL
+    LEGAL
+    INFO
+    SOCIAL
+    LOGISTIC
+    MENTAL
 }
 
 enum HelpRequestStatus {
