@@ -1,0 +1,9 @@
+model otp {
+    uuid       String   @id @default(uuid()) @db.Uuid
+    userId     Int      @map("user_id")
+    user       User     @relation(fields: [userId], references: [id])
+    otp        String
+    revokeDate DateTime
+
+    @@map("otps")
+}

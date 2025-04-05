@@ -1,0 +1,12 @@
+model HelpRequest {
+    uuid String @id @default(uuid())
+    text String
+
+    requester   User  @relation("RequesterRequests", fields: [requesterId], references: [id])
+    requesterId Int   @map("requester_id")
+    helper      User? @relation("HelperRequests", fields: [helperId], references: [id])
+    helperId    Int?  @map("helper_id")
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+}

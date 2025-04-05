@@ -1,0 +1,22 @@
+model User {
+    id        Int      @id @default(autoincrement())
+    tel       String   @unique
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    roles     Role[]
+
+    requesterRequests HelpRequest[] @relation("RequesterRequests")
+    helperRequests    HelpRequest[] @relation("HelperRequests")
+    articles          Article[]
+    otps              otp[]
+
+    @@map("users")
+}
+
+enum Role {
+    MODERATOR
+    SOLDIER
+    FAMILY_MEMBER
+    MIGRANT
+    VOLUNTEER
+}
