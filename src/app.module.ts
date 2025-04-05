@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigifyModule } from '@itgorillaz/configify';
 import { AiModule } from './ai/ai.module';
 import { ArticlesModule } from './articles/articles.module';
+import { HelpRequestsModule } from './help-requests/help-requests.module';
 
 @Module({
 	imports: [
@@ -14,6 +15,7 @@ import { ArticlesModule } from './articles/articles.module';
 		UsersModule,
 		AiModule,
 		ArticlesModule,
+		HelpRequestsModule,
 	],
 })
 export class AppModule {}
