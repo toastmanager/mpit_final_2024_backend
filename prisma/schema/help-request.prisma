@@ -2,11 +2,20 @@ model HelpRequest {
     uuid String @id @default(uuid())
     text String
 
-    requester   User  @relation("RequesterRequests", fields: [requesterId], references: [id])
-    requesterId Int   @map("requester_id")
-    helper      User? @relation("HelperRequests", fields: [helperId], references: [id])
-    helperId    Int?  @map("helper_id")
+    requester   User              @relation("RequesterRequests", fields: [requesterId], references: [id])
+    requesterId Int               @map("requester_id")
+    volunteer   User?             @relation("VolunteerRequests", fields: [volunteerId], references: [id])
+    volunteerId Int?              @map("volunteer_id")
+    status      HelpRequestStatus @default(ON_CONSIDERATION)
 
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+enum HelpRequestStatus {
+    ON_CONSIDERATION
+    APPROVED
+    VOLUNTEER_FOUND
+    FINISHED
+    EXPIRED
 }
