@@ -18,7 +18,7 @@ import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { HelpRequestDto } from './dto/help-request.dto';
 import { HelpRequestStatus } from '@prisma/client';
 
-@Controller('helpRequests')
+@Controller('help-requests')
 export class HelpRequestsController {
 	constructor(private readonly helpRequestsService: HelpRequestsService) {}
 
