@@ -21,6 +21,7 @@ enum HelpRequestType {
     SOCIAL
     LOGISTIC
     MENTAL
+    OTHER
 }
 
 enum HelpRequestStatus {
