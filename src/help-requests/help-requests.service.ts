@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { HelpRequest, Prisma } from '@prisma/client';
+import { HelpRequest, HelpRequestStatus, Prisma } from '@prisma/client';
 import { HelpRequestDto } from './dto/help-request.dto';
 import { removeNullFields } from '../utils';
 
@@ -51,5 +51,38 @@ export class HelpRequestsService {
 			if (helpRequestDto) helpRequestsDtos.push(helpRequestDto);
 		}
 		return helpRequestsDtos;
+	}
+
+	async setVolunteer(args: { requestUuid: string; volunteerId: number }) {
+		const { requestUuid, volunteerId } = args;
+		const request = await this.prisma.helpRequest.update({
+			where: {
+				uuid: requestUuid,
+			},
+			data: {
+				volunteer: {
+					connect: {
+						id: volunteerId,
+					},
+				},
+				status: HelpRequestStatus.VOLUNTEER_FOUND,
+			},
+		});
+		return request;
+	}
+
+	async removeVolunteer(requestUuid: string) {
+		const request = await this.prisma.helpRequest.update({
+			where: {
+				uuid: requestUuid,
+			},
+			data: {
+				volunteer: {
+					disconnect: true,
+				},
+				status: HelpRequestStatus.APPROVED,
+			},
+		});
+		return request;
 	}
 }

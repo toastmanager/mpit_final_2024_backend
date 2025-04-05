@@ -16,6 +16,7 @@ import { UpdateHelpRequestDto } from './dto/update-help-request.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { HelpRequestDto } from './dto/help-request.dto';
+import { HelpRequestStatus } from '@prisma/client';
 
 @Controller('helpRequests')
 export class HelpRequestsController {
@@ -37,7 +38,7 @@ export class HelpRequestsController {
 				...createHelpRequestDto,
 				requester: {
 					connect: {
-						id: user.sub,
+						id: +user.sub,
 					},
 				},
 			},
@@ -53,7 +54,11 @@ export class HelpRequestsController {
 		isArray: true,
 	})
 	async findAll() {
-		const helpRequests = await this.helpRequestsService.findMany();
+		const helpRequests = await this.helpRequestsService.findMany({
+			where: {
+				status: HelpRequestStatus.APPROVED,
+			},
+		});
 		const helpRequestDto =
 			await this.helpRequestsService.getHelpRequestDtos(helpRequests);
 		return helpRequestDto;
@@ -113,5 +118,31 @@ export class HelpRequestsController {
 		const helpRequestDto =
 			await this.helpRequestsService.getHelpRequestDto(helpRequest);
 		return helpRequestDto;
+	}
+
+	@Post(':uuid/volunteer')
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({
+		type: HelpRequestDto,
+	})
+	async respond(@Request() req: any, @Param('uuid') uuid: string) {
+		const { user } = req;
+		const helpRequest = await this.helpRequestsService.setVolunteer({
+			requestUuid: uuid,
+			volunteerId: +user.sub,
+		});
+		return helpRequest;
+	}
+
+	@Delete(':uuid/volunteer')
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({
+		type: HelpRequestDto,
+	})
+	async decline(@Request() req: any, @Param('uuid') uuid: string) {
+		const helpRequest = await this.helpRequestsService.removeVolunteer(uuid);
+		return helpRequest;
 	}
 }

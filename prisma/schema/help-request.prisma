@@ -27,6 +27,7 @@ enum HelpRequestStatus {
     ON_CONSIDERATION
     APPROVED
     VOLUNTEER_FOUND
+    IN_PROGRESS
     FINISHED
-    EXPIRED
+    CANCELED
 }
