@@ -9,6 +9,7 @@ import {
 	Request,
 	UseGuards,
 	NotFoundException,
+	Put,
 } from '@nestjs/common';
 import { HelpRequestsService } from './help-requests.service';
 import { CreateHelpRequestDto } from './dto/create-help-request.dto';
@@ -19,6 +20,7 @@ import { HelpRequestDto } from './dto/help-request.dto';
 import { HelpRequestStatus } from '@prisma/client';
 import { HelpRequestFeedbackDto } from './dto/help-request-feedback.dto';
 import { CreateHelpRequestFeedbackDto } from './dto/create-help-request-feedback.dto';
+import { UpdateHelpRequetStatusDto } from './dto/update-help-request-status.dto';
 
 @Controller('help-requests')
 export class HelpRequestsController {
@@ -184,5 +186,29 @@ export class HelpRequestsController {
 		const feedback = await this.helpRequestsService.removeFeedback(uuid);
 		const feedbackDto = await this.helpRequestsService.getFeedbackDto(feedback);
 		return feedbackDto;
+	}
+
+	@Put(':uuid/status')
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({
+		type: HelpRequestFeedbackDto,
+	})
+	async updateHelpRequetStatus(
+		@Param('uuid') uuid: string,
+		@Body() updateHelpRequetStatusDto: UpdateHelpRequetStatusDto,
+	): Promise<HelpRequestDto> {
+		const helpRequest = await this.helpRequestsService.update({
+			where: {
+				uuid: uuid,
+			},
+			data: {
+				status: updateHelpRequetStatusDto.status,
+			},
+		});
+		const helpRequestDto =
+			await this.helpRequestsService.getHelpRequestDto(helpRequest);
+		//TODO: Send notification about status change
+		return helpRequestDto;
 	}
 }
