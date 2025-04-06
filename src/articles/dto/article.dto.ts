@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsISO8601, IsNotEmpty, IsString } from 'class-validator';
-import { UserResponseDto } from '../../users/dto/user-response.dto';
+import { UserDto } from '../../users/dto/user-response.dto';
 
 export class ArticleDto {
 	@ApiProperty()
@@ -23,9 +23,9 @@ export class ArticleDto {
 	text: string;
 
 	@ApiProperty({
-		type: UserResponseDto,
+		type: UserDto,
 	})
-	author: UserResponseDto;
+	author: UserDto;
 
 	@ApiProperty()
 	@IsISO8601()

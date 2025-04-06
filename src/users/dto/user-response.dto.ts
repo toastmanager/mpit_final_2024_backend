@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt } from 'class-validator';
 
-export class UserResponseDto {
+export class UserDto {
 	@ApiProperty({ description: 'The unique identifier of the user', example: 1 })
 	@IsInt()
 	id: number;

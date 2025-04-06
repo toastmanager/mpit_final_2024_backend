@@ -24,7 +24,7 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { LogoutDto } from './dto/logout.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
-import { UserSensitiveResponseDto } from '../users/dto/user-sensitive.dto';
+import { UserSensitiveDto } from '../users/dto/user-sensitive.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -85,10 +85,10 @@ export class AuthController {
 	@Get('me')
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({
-		type: UserSensitiveResponseDto,
+		type: UserSensitiveDto,
 	})
 	@ApiBearerAuth()
-	async getUser(@Request() req: any): Promise<UserSensitiveResponseDto> {
+	async getUser(@Request() req: any): Promise<UserSensitiveDto> {
 		const { user: payload } = req;
 		const user = await this.usersService.findUnique({
 			where: {
