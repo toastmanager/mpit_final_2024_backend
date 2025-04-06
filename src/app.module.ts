@@ -6,6 +6,7 @@ import { ConfigifyModule } from '@itgorillaz/configify';
 import { AiModule } from './ai/ai.module';
 import { ArticlesModule } from './articles/articles.module';
 import { HelpRequestsModule } from './help-requests/help-requests.module';
+import { ReferencesModule } from './references/references.module';
 
 @Module({
 	imports: [
@@ -16,6 +17,7 @@ import { HelpRequestsModule } from './help-requests/help-requests.module';
 		AiModule,
 		ArticlesModule,
 		HelpRequestsModule,
+		ReferencesModule,
 	],
 })
 export class AppModule {}

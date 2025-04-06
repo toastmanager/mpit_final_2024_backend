@@ -1,0 +1,9 @@
+model Contact {
+    id          Int       @id @default(autoincrement())
+    reference   Reference @relation(fields: [referenceId], references: [id], onDelete: Cascade)
+    referenceId Int       @map("reference_id")
+    contact     String
+    type        String
+
+    @@map("contacts")
+}
