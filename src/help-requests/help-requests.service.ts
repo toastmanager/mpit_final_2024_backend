@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { HelpRequest, HelpRequestStatus, Prisma } from '@prisma/client';
+import {
+	HelpRequest,
+	HelpRequestFeedback,
+	HelpRequestStatus,
+	Prisma,
+} from '@prisma/client';
 import { HelpRequestDto } from './dto/help-request.dto';
 import { removeNullFields } from '../utils';
+import { HelpRequestFeedbackDto } from './dto/help-request-feedback.dto';
 
 @Injectable()
 export class HelpRequestsService {
@@ -84,5 +90,25 @@ export class HelpRequestsService {
 			},
 		});
 		return request;
+	}
+
+	async createFeedback(args: Prisma.HelpRequestFeedbackCreateArgs) {
+		const feedback = await this.prisma.helpRequestFeedback.create(args);
+		return feedback;
+	}
+
+	async removeFeedback(helpRequestUuid: string) {
+		const feedback = await this.prisma.helpRequestFeedback.delete({
+			where: {
+				helpRequestUuid: helpRequestUuid,
+			},
+		});
+		return feedback;
+	}
+
+	async getFeedbackDto(
+		feedback: HelpRequestFeedback,
+	): Promise<HelpRequestFeedbackDto> {
+		return removeNullFields(feedback);
 	}
 }

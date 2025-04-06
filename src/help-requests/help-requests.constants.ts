@@ -1,0 +1,1 @@
+export const HELP_REQUEST_FEEDBACK_MAX_SCORE = 10;
