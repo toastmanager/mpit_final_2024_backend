@@ -7,7 +7,6 @@ import { AiModule } from './ai/ai.module';
 import { ArticlesModule } from './articles/articles.module';
 import { HelpRequestsModule } from './help-requests/help-requests.module';
 import { ReferencesModule } from './references/references.module';
-import { VolunteerFeedbacksModule } from './volunteer-feedbacks/volunteer-feedbacks.module';
 
 @Module({
 	imports: [
@@ -19,7 +18,6 @@ import { VolunteerFeedbacksModule } from './volunteer-feedbacks/volunteer-feedba
 		ArticlesModule,
 		HelpRequestsModule,
 		ReferencesModule,
-		VolunteerFeedbacksModule,
 	],
 })
 export class AppModule {}

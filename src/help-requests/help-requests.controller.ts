@@ -17,6 +17,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { HelpRequestDto } from './dto/help-request.dto';
 import { HelpRequestStatus } from '@prisma/client';
+import { HelpRequestFeedbackDto } from './dto/help-request-feedback.dto';
+import { CreateHelpRequestFeedbackDto } from './dto/create-help-request-feedback.dto';
 
 @Controller('help-requests')
 export class HelpRequestsController {
@@ -144,5 +146,43 @@ export class HelpRequestsController {
 	async decline(@Request() req: any, @Param('uuid') uuid: string) {
 		const helpRequest = await this.helpRequestsService.removeVolunteer(uuid);
 		return helpRequest;
+	}
+
+	@Post(':uuid/feedback')
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({
+		type: HelpRequestFeedbackDto,
+	})
+	async addFeedback(
+		@Param('uuid') uuid: string,
+		@Body() createHelpRequestFeedbackDto: CreateHelpRequestFeedbackDto,
+	): Promise<HelpRequestFeedbackDto> {
+		const feedback = await this.helpRequestsService.createFeedback({
+			data: {
+				...createHelpRequestFeedbackDto,
+				helpRequest: {
+					connect: {
+						uuid: uuid,
+					},
+				},
+			},
+		});
+		const feedbackDto = await this.helpRequestsService.getFeedbackDto(feedback);
+		return feedbackDto;
+	}
+
+	@Delete(':uuid/feedback')
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({
+		type: HelpRequestFeedbackDto,
+	})
+	async removeFeedback(
+		@Param('uuid') uuid: string,
+	): Promise<HelpRequestFeedbackDto> {
+		const feedback = await this.helpRequestsService.removeFeedback(uuid);
+		const feedbackDto = await this.helpRequestsService.getFeedbackDto(feedback);
+		return feedbackDto;
 	}
 }

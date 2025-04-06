@@ -2,12 +2,13 @@ model HelpRequest {
     uuid String @id @default(uuid())
     text String
 
-    requester   User              @relation("RequesterRequests", fields: [requesterId], references: [id])
-    requesterId Int               @map("requester_id")
-    volunteer   User?             @relation("VolunteerRequests", fields: [volunteerId], references: [id])
-    volunteerId Int?              @map("volunteer_id")
+    requester   User                 @relation("RequesterRequests", fields: [requesterId], references: [id])
+    requesterId Int                  @map("requester_id")
+    volunteer   User?                @relation("VolunteerRequests", fields: [volunteerId], references: [id])
+    volunteerId Int?                 @map("volunteer_id")
     type        HelpRequestType
-    status      HelpRequestStatus @default(ON_CONSIDERATION)
+    status      HelpRequestStatus    @default(ON_CONSIDERATION)
+    feedback    HelpRequestFeedback?
 
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
