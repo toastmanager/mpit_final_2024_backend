@@ -2,20 +2,34 @@ model HelpRequest {
     uuid String @id @default(uuid())
     text String
 
-    requester   User              @relation("RequesterRequests", fields: [requesterId], references: [id])
-    requesterId Int               @map("requester_id")
-    volunteer   User?             @relation("VolunteerRequests", fields: [volunteerId], references: [id])
-    volunteerId Int?              @map("volunteer_id")
-    status      HelpRequestStatus @default(ON_CONSIDERATION)
+    requester   User                 @relation("RequesterRequests", fields: [requesterId], references: [id])
+    requesterId Int                  @map("requester_id")
+    volunteer   User?                @relation("VolunteerRequests", fields: [volunteerId], references: [id])
+    volunteerId Int?                 @map("volunteer_id")
+    type        HelpRequestType
+    status      HelpRequestStatus    @default(ON_CONSIDERATION)
+    feedback    HelpRequestFeedback?
 
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+enum HelpRequestType {
+    MATERIAL
+    MEDICAL
+    LEGAL
+    INFO
+    SOCIAL
+    LOGISTIC
+    MENTAL
+    OTHER
 }
 
 enum HelpRequestStatus {
     ON_CONSIDERATION
     APPROVED
     VOLUNTEER_FOUND
+    IN_PROGRESS
     FINISHED
-    EXPIRED
+    CANCELED
 }

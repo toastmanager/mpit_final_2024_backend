@@ -1,0 +1,8 @@
+model HelpRequestFeedback {
+    helpRequestUuid String      @id
+    text            String
+    score           Int
+    helpRequest     HelpRequest @relation(fields: [helpRequestUuid], references: [uuid])
+
+    @@map("help_request_feedbacks")
+}
