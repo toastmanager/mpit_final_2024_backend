@@ -1,0 +1,17 @@
+model Reference {
+    id          Int           @id @default(autoincrement())
+    contacts    Contact[]
+    addresses   String[]
+    title       String
+    type        ReferenceType
+    description String?
+    capacity    Int?
+
+    @@map("references")
+}
+
+enum ReferenceType {
+    SHELTER
+    CHARITY
+    OTHER
+}
