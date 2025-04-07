@@ -35,10 +35,10 @@ export class AiService implements OnModuleInit {
 		}
 	}
 
-	async sendMessage(message: string, context?: string) {
+	async sendMessage(message: string, context?: string, history?: string) {
 		const messages = [
 			new SystemMessage(
-				`Ответь на вопрос на пользователя основываясь на предоставленном контексте и том что ты знаешь: ${context ?? ''}`,
+				`Ответь на вопрос на пользователя основываясь на предоставленном контексте и том что ты знаешь: ${context ?? ''}\nТакже, если далее указан текст, то он представляет историю вашей переписки: ${history}`,
 			),
 			new HumanMessage(message),
 		];

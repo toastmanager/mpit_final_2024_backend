@@ -6,4 +6,9 @@ export class SendMessageDto {
 	@IsString()
 	@IsNotEmpty()
 	message: string;
+
+	@ApiProperty()
+	@IsString()
+	@IsNotEmpty()
+	history: string;
 }

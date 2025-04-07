@@ -13,7 +13,11 @@ export class AiController {
 		type: String,
 	})
 	sendMessage(@Body() sendMessageDto: SendMessageDto) {
-		return this.aiService.sendMessage(sendMessageDto.message);
+		return this.aiService.sendMessage(
+			sendMessageDto.message,
+			undefined,
+			sendMessageDto.history,
+		);
 	}
 
 	@Post('embedding')
