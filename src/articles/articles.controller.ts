@@ -18,6 +18,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { ArticleDto } from './dto/article.dto';
 import { createSlug } from '../utils';
+import { AskArticlesChatbotDto } from './dto/ask-articles-chatbot.dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -149,8 +150,14 @@ export class ArticlesController {
 	@ApiOkResponse({
 		type: String,
 	})
-	async chatbot(@Param('query') query: string) {
-		const response = await this.articlesService.askChatbot(query);
+	async chatbot(
+		@Param('query') query: string,
+		@Body() askArticlesChatbotDto: AskArticlesChatbotDto,
+	) {
+		const response = await this.articlesService.askChatbot(
+			query,
+			askArticlesChatbotDto.history,
+		);
 		return response;
 	}
 

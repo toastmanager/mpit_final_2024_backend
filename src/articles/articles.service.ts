@@ -119,11 +119,12 @@ export class ArticlesService {
 		return foundedArticles;
 	}
 
-	async askChatbot(query: string) {
+	async askChatbot(query: string, history?: string) {
 		const relatedArticles = await this.findByMeaning(query);
 		const response = await this.aiService.sendMessage(
 			query,
 			JSON.stringify(relatedArticles),
+			history,
 		);
 		return response;
 	}
