@@ -3,11 +3,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Article, Prisma } from '@prisma/client';
 import { ArticleDto } from './dto/article.dto';
 import { AiService } from '../ai/ai.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ArticlesService {
 	constructor(
 		private readonly prisma: PrismaService,
+		private readonly usersService: UsersService,
 		private readonly aiService: AiService,
 	) {}
 
@@ -47,13 +49,7 @@ export class ArticlesService {
 				id: article.id,
 			},
 			select: {
-				author: {
-					select: {
-						id: true,
-						createdAt: true,
-						updatedAt: true,
-					},
-				},
+				author: true,
 			},
 		});
 
@@ -63,7 +59,7 @@ export class ArticlesService {
 
 		return {
 			...article,
-			author: articleWithAuthor.author,
+			author: await this.usersService.getUserDto(articleWithAuthor.author),
 		};
 	}
 

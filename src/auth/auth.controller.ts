@@ -98,6 +98,6 @@ export class AuthController {
 		if (!user) {
 			throw new NotFoundException('User with this id not found');
 		}
-		return user;
+		return this.usersService.getUserSensitiveDto(user);
 	}
 }

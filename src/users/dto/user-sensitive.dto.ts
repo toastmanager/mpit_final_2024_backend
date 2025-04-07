@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserDto } from './user-response.dto';
+import { UserDto } from './user.dto';
 import { Role } from '@prisma/client';
 
 export class UserSensitiveDto extends UserDto {

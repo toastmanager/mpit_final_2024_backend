@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
+import { UserDto } from './dto/user.dto';
+import { UserSensitiveDto } from './dto/user-sensitive.dto';
+import { removeNullFields } from '../utils';
 
 @Injectable()
 export class UsersService {
@@ -50,5 +53,19 @@ export class UsersService {
 				tel: tel,
 			},
 		});
+	}
+
+	async getUserDto(user: User): Promise<UserDto> {
+		return removeNullFields({
+			id: user.id,
+			avatarUrl: undefined,
+			username: user.username,
+			createdAt: user.createdAt,
+			updatedAt: user.updatedAt,
+		});
+	}
+
+	async getUserSensitiveDto(user: User): Promise<UserSensitiveDto> {
+		return removeNullFields({ ...user, avatarUrl: undefined });
 	}
 }
