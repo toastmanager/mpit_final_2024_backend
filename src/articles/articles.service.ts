@@ -4,12 +4,14 @@ import { Article, Prisma } from '@prisma/client';
 import { ArticleDto } from './dto/article.dto';
 import { AiService } from '../ai/ai.service';
 import { UsersService } from '../users/users.service';
+import { ArticleBannersStorage } from './article-banners.storage';
 
 @Injectable()
 export class ArticlesService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly usersService: UsersService,
+		private readonly articleBanners: ArticleBannersStorage,
 		private readonly aiService: AiService,
 	) {}
 
@@ -57,8 +59,13 @@ export class ArticlesService {
 			return null;
 		}
 
+		const bannerUrl = await this.articleBanners.getUrl({
+			objectKey: article.id.toString(),
+		});
+
 		return {
 			...article,
+			bannerUrl: bannerUrl,
 			author: await this.usersService.getUserDto(articleWithAuthor.author),
 		};
 	}
@@ -127,5 +134,19 @@ export class ArticlesService {
 			history,
 		);
 		return response;
+	}
+
+	async uploadBanner(id: number, file: Express.Multer.File) {
+		await this.articleBanners.put({
+			filename: id.toString(),
+			file: file.buffer,
+			generateFilename: false,
+		});
+	}
+
+	async deleteBanner(id: number) {
+		await this.articleBanners.delete({
+			objectKey: id.toString(),
+		});
 	}
 }
