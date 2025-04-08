@@ -12,6 +12,9 @@ export class HelpRequestDto {
 		description: 'Help request text content',
 		example: 'I need help with my homework in mathematics',
 	})
+	title: string;
+
+	@ApiProperty()
 	text: string;
 
 	@ApiProperty({
@@ -36,7 +39,7 @@ export class HelpRequestDto {
 	@ApiProperty({
 		description: 'Current status of the help request',
 		enum: HelpRequestStatus,
-		example: HelpRequestStatus.ON_CONSIDERATION,
+		example: HelpRequestStatus.CREATED,
 	})
 	status: HelpRequestStatus;
 

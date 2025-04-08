@@ -109,6 +109,7 @@ export class ArticlesController {
 		if (!article) {
 			throw new NotFoundException(`Article with id "${id}" not found`);
 		}
+		await this.articlesService.addViews(+id, 1);
 		const articleDto = await this.articlesService.getArticleDto(article);
 		return articleDto;
 	}

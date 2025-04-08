@@ -149,4 +149,22 @@ export class ArticlesService {
 			objectKey: id.toString(),
 		});
 	}
+
+	async addViews(id: number, views: number): Promise<number> {
+		const article = await this.prisma.article.update({
+			data: {
+				views: {
+					increment: views,
+				},
+			},
+			where: {
+				id: +id,
+			},
+			select: {
+				views: true,
+			},
+		});
+
+		return article.views;
+	}
 }

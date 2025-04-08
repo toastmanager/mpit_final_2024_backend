@@ -86,7 +86,7 @@ export class HelpRequestsService {
 				volunteer: {
 					disconnect: true,
 				},
-				status: HelpRequestStatus.APPROVED,
+				status: HelpRequestStatus.CREATED,
 			},
 		});
 		return request;

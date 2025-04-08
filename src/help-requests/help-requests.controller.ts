@@ -60,7 +60,9 @@ export class HelpRequestsController {
 	async findAll() {
 		const helpRequests = await this.helpRequestsService.findMany({
 			where: {
-				status: HelpRequestStatus.APPROVED,
+				status: {
+					notIn: [HelpRequestStatus.FINISHED, HelpRequestStatus.CANCELED],
+				},
 			},
 		});
 		const helpRequestDto =

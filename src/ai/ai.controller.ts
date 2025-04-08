@@ -8,23 +8,23 @@ import { CreateEmbeddingDto } from './dto/create-embedding.dto';
 export class AiController {
 	constructor(private readonly aiService: AiService) {}
 
-	@Post('message')
-	@ApiOkResponse({
-		type: String,
-	})
-	sendMessage(@Body() sendMessageDto: SendMessageDto) {
-		return this.aiService.sendMessage(
-			sendMessageDto.message,
-			undefined,
-			sendMessageDto.history,
-		);
-	}
+	// @Post('message')
+	// @ApiOkResponse({
+	// 	type: String,
+	// })
+	// sendMessage(@Body() sendMessageDto: SendMessageDto) {
+	// 	return this.aiService.sendMessage(
+	// 		sendMessageDto.message,
+	// 		undefined,
+	// 		sendMessageDto.history,
+	// 	);
+	// }
 
-	@Post('embedding')
-	@ApiOkResponse({
-		type: String,
-	})
-	createEmbedding(@Body() createEmbeddingDto: CreateEmbeddingDto) {
-		return this.aiService.createEmbedding(createEmbeddingDto.text);
-	}
+	// @Post('embedding')
+	// @ApiOkResponse({
+	// 	type: String,
+	// })
+	// createEmbedding(@Body() createEmbeddingDto: CreateEmbeddingDto) {
+	// 	return this.aiService.createEmbedding(createEmbeddingDto.text);
+	// }
 }
