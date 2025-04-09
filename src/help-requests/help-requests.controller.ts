@@ -126,20 +126,20 @@ export class HelpRequestsController {
 		return helpRequestDto;
 	}
 
-	@Post(':uuid/volunteer')
-	@UseGuards(JwtAuthGuard)
-	@ApiBearerAuth()
-	@ApiOkResponse({
-		type: HelpRequestDto,
-	})
-	async respond(@Request() req: any, @Param('uuid') uuid: string) {
-		const { user } = req;
-		const helpRequest = await this.helpRequestsService.setVolunteer({
-			requestUuid: uuid,
-			volunteerId: +user.sub,
-		});
-		return helpRequest;
-	}
+	// @Post(':uuid/volunteer')
+	// @UseGuards(JwtAuthGuard)
+	// @ApiBearerAuth()
+	// @ApiOkResponse({
+	// 	type: HelpRequestDto,
+	// })
+	// async respond(@Request() req: any, @Param('uuid') uuid: string) {
+	// 	const { user } = req;
+	// 	const helpRequest = await this.helpRequestsService.setVolunteer({
+	// 		requestUuid: uuid,
+	// 		volunteerTg: +user.sub,
+	// 	});
+	// 	return helpRequest;
+	// }
 
 	@Delete(':uuid/volunteer')
 	@UseGuards(JwtAuthGuard)

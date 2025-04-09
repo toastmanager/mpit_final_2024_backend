@@ -59,18 +59,14 @@ export class HelpRequestsService {
 		return helpRequestsDtos;
 	}
 
-	async setVolunteer(args: { requestUuid: string; volunteerId: number }) {
-		const { requestUuid, volunteerId } = args;
+	async setVolunteer(args: { requestUuid: string; volunteerTg: string }) {
+		const { requestUuid, volunteerTg } = args;
 		const request = await this.prisma.helpRequest.update({
 			where: {
 				uuid: requestUuid,
 			},
 			data: {
-				volunteer: {
-					connect: {
-						id: volunteerId,
-					},
-				},
+				volunteerTg: volunteerTg,
 				status: HelpRequestStatus.VOLUNTEER_FOUND,
 			},
 		});
@@ -83,9 +79,7 @@ export class HelpRequestsService {
 				uuid: requestUuid,
 			},
 			data: {
-				volunteer: {
-					disconnect: true,
-				},
+				volunteerTg: undefined,
 				status: HelpRequestStatus.CREATED,
 			},
 		});
@@ -110,5 +104,15 @@ export class HelpRequestsService {
 		feedback: HelpRequestFeedback,
 	): Promise<HelpRequestFeedbackDto> {
 		return removeNullFields(feedback);
+	}
+
+	async getRandomRequest(): Promise<HelpRequest | null> {
+		const randomRequest = await this.prisma.$queryRaw<HelpRequest>`
+			SELECT * FROM "HelpRequest" 
+			WHERE status = 'CREATED'
+			ORDER BY RANDOM()
+			LIMIT 1
+		`;
+		return randomRequest[0];
 	}
 }

@@ -7,7 +7,6 @@ model User {
     roles     Role[]
 
     requesterRequests HelpRequest[] @relation("RequesterRequests")
-    volunteerRequests HelpRequest[] @relation("VolunteerRequests")
     articles          Article[]
     otps              otp[]
 

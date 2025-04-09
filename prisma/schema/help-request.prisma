@@ -7,8 +7,7 @@ model HelpRequest {
 
     requester   User                 @relation("RequesterRequests", fields: [requesterId], references: [id])
     requesterId Int                  @map("requester_id")
-    volunteer   User?                @relation("VolunteerRequests", fields: [volunteerId], references: [id])
-    volunteerId Int?                 @map("volunteer_id")
+    volunteerTg String?              @map("volunteer_tg")
     feedback    HelpRequestFeedback?
 
     createdAt DateTime @default(now()) @map("created_at")
