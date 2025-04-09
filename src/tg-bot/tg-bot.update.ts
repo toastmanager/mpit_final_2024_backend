@@ -48,7 +48,6 @@ export class TgBotUpdate {
 	async getUsersHelp(ctx: Context) {
 		//@ts-ignore
 		const username = ctx.update.message.from.username;
-		console.log(username);
 		const helpRequests = await this.helpRequestsService.findMany({
 			where: {
 				volunteerTg: username,
