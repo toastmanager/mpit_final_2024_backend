@@ -1,10 +1,22 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsInt } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class UserResponseDto {
+export class UserDto {
 	@ApiProperty({ description: 'The unique identifier of the user', example: 1 })
 	@IsInt()
 	id: number;
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	@IsNotEmpty()
+	username?: string;
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	@IsNotEmpty()
+	avatarUrl?: string;
 
 	@ApiProperty({
 		description: 'The creation timestamp of the user',

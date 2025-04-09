@@ -12,7 +12,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
-import { UserResponseDto } from './dto/user-response.dto';
+import { UserDto } from './dto/user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('users')
@@ -23,7 +23,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({
-		type: UserResponseDto,
+		type: UserDto,
 	})
 	create(@Body() createUserDto: CreateUserDto) {
 		return this.usersService.create({
@@ -35,7 +35,7 @@ export class UsersController {
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
 	@ApiOkResponse({
-		type: UserResponseDto,
+		type: UserDto,
 		isArray: true,
 	})
 	findAll() {
@@ -46,7 +46,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({
-		type: UserResponseDto,
+		type: UserDto,
 	})
 	findOne(@Param('id') id: string) {
 		return this.usersService.findUnique({
@@ -60,7 +60,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({
-		type: UserResponseDto,
+		type: UserDto,
 	})
 	update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
 		return this.usersService.update({
@@ -75,7 +75,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({
-		type: UserResponseDto,
+		type: UserDto,
 	})
 	remove(@Param('id') id: string) {
 		return this.usersService.remove({

@@ -3,11 +3,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Article, Prisma } from '@prisma/client';
 import { ArticleDto } from './dto/article.dto';
 import { AiService } from '../ai/ai.service';
+import { UsersService } from '../users/users.service';
+import { ArticleBannersStorage } from './article-banners.storage';
 
 @Injectable()
 export class ArticlesService {
 	constructor(
 		private readonly prisma: PrismaService,
+		private readonly usersService: UsersService,
+		private readonly articleBanners: ArticleBannersStorage,
 		private readonly aiService: AiService,
 	) {}
 
@@ -47,13 +51,7 @@ export class ArticlesService {
 				id: article.id,
 			},
 			select: {
-				author: {
-					select: {
-						id: true,
-						createdAt: true,
-						updatedAt: true,
-					},
-				},
+				author: true,
 			},
 		});
 
@@ -61,9 +59,14 @@ export class ArticlesService {
 			return null;
 		}
 
+		const bannerUrl = await this.articleBanners.getUrl({
+			objectKey: article.id.toString(),
+		});
+
 		return {
 			...article,
-			author: articleWithAuthor.author,
+			bannerUrl: bannerUrl,
+			author: await this.usersService.getUserDto(articleWithAuthor.author),
 		};
 	}
 
@@ -123,12 +126,45 @@ export class ArticlesService {
 		return foundedArticles;
 	}
 
-	async askChatbot(query: string) {
+	async askChatbot(query: string, history?: string) {
 		const relatedArticles = await this.findByMeaning(query);
 		const response = await this.aiService.sendMessage(
 			query,
 			JSON.stringify(relatedArticles),
+			history,
 		);
 		return response;
+	}
+
+	async uploadBanner(id: number, file: Express.Multer.File) {
+		await this.articleBanners.put({
+			filename: id.toString(),
+			file: file.buffer,
+			generateFilename: false,
+		});
+	}
+
+	async deleteBanner(id: number) {
+		await this.articleBanners.delete({
+			objectKey: id.toString(),
+		});
+	}
+
+	async addViews(id: number, views: number): Promise<number> {
+		const article = await this.prisma.article.update({
+			data: {
+				views: {
+					increment: views,
+				},
+			},
+			where: {
+				id: +id,
+			},
+			select: {
+				views: true,
+			},
+		});
+
+		return article.views;
 	}
 }

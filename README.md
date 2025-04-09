@@ -54,10 +54,10 @@ yarn start:dev
 3. Настройте `Caddyfile` ([Документация](https://caddyserver.com/docs/caddyfile))
 4. Запустите сервер
    ```bash
-   docker compose up -d --build backend
+   docker compose up -d --build
    ```
    - `-d` запускает контейнеры в фоновом режиме
-   - `--build backend` создаёт новую сборку сервера
+   - `--build` создаёт новую сборку сервера
 
 ## ⚙️ Поддержка сервера
 

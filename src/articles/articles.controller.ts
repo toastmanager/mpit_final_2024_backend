@@ -10,14 +10,26 @@ import {
 	Request,
 	NotFoundException,
 	InternalServerErrorException,
+	UploadedFile,
+	Put,
+	HttpCode,
+	UseInterceptors,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import {
+	ApiBearerAuth,
+	ApiBody,
+	ApiConsumes,
+	ApiNoContentResponse,
+	ApiOkResponse,
+} from '@nestjs/swagger';
 import { ArticleDto } from './dto/article.dto';
 import { createSlug } from '../utils';
+import { AskArticlesChatbotDto } from './dto/ask-articles-chatbot.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('articles')
 export class ArticlesController {
@@ -79,7 +91,11 @@ export class ArticlesController {
 		isArray: true,
 	})
 	async findAll() {
-		const articles = await this.articlesService.findMany();
+		const articles = await this.articlesService.findMany({
+			orderBy: {
+				createdAt: 'desc',
+			},
+		});
 		const articleDtos = await this.articlesService.getArticleDtos(articles);
 		return articleDtos;
 	}
@@ -97,6 +113,7 @@ export class ArticlesController {
 		if (!article) {
 			throw new NotFoundException(`Article with id "${id}" not found`);
 		}
+		await this.articlesService.addViews(+id, 1);
 		const articleDto = await this.articlesService.getArticleDto(article);
 		return articleDto;
 	}
@@ -149,8 +166,14 @@ export class ArticlesController {
 	@ApiOkResponse({
 		type: String,
 	})
-	async chatbot(@Param('query') query: string) {
-		const response = await this.articlesService.askChatbot(query);
+	async chatbot(
+		@Param('query') query: string,
+		@Body() askArticlesChatbotDto: AskArticlesChatbotDto,
+	) {
+		const response = await this.articlesService.askChatbot(
+			query,
+			askArticlesChatbotDto.history,
+		);
 		return response;
 	}
 
@@ -164,5 +187,41 @@ export class ArticlesController {
 		const articleDtos =
 			await this.articlesService.getArticleDtos(foundedArticles);
 		return articleDtos;
+	}
+
+	@Put(':id/banner')
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiNoContentResponse()
+	@HttpCode(204)
+	@ApiConsumes('multipart/form-data')
+	@UseInterceptors(FileInterceptor('file'))
+	@ApiBody({
+		required: true,
+		schema: {
+			type: 'object',
+			properties: {
+				file: {
+					type: 'string',
+					format: 'binary',
+				},
+			},
+		},
+	})
+	async putBanner(
+		@Param('id') id: string,
+		@UploadedFile() file: Express.Multer.File,
+	) {
+		await this.articlesService.uploadBanner(+id, file);
+		return;
+	}
+
+	@Delete(':id/banner')
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@HttpCode(204)
+	async deleteBanner(@Request() req: any, @Param('id') id: string) {
+		await this.articlesService.deleteBanner(+id);
+		return;
 	}
 }

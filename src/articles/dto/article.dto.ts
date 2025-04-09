@@ -1,6 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsISO8601, IsNotEmpty, IsString } from 'class-validator';
-import { UserResponseDto } from '../../users/dto/user-response.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+	IsIn,
+	IsInt,
+	IsISO8601,
+	IsNotEmpty,
+	IsOptional,
+	IsString,
+	Min,
+} from 'class-validator';
+import { UserDto } from '../../users/dto/user.dto';
 
 export class ArticleDto {
 	@ApiProperty()
@@ -22,10 +30,23 @@ export class ArticleDto {
 	@IsString()
 	text: string;
 
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	@IsNotEmpty()
+	bannerUrl?: string;
+
 	@ApiProperty({
-		type: UserResponseDto,
+		type: UserDto,
 	})
-	author: UserResponseDto;
+	author: UserDto;
+
+	@ApiProperty({
+		type: 'integer',
+	})
+	@Min(0)
+	@IsInt()
+	views: number;
 
 	@ApiProperty()
 	@IsISO8601()

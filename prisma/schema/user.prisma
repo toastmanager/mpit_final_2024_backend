@@ -1,12 +1,12 @@
 model User {
     id        Int      @id @default(autoincrement())
     tel       String   @unique
+    username  String?
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
     roles     Role[]
 
     requesterRequests HelpRequest[] @relation("RequesterRequests")
-    volunteerRequests HelpRequest[] @relation("VolunteerRequests")
     articles          Article[]
     otps              otp[]
 
