@@ -43,4 +43,24 @@ export class TgBotUpdate {
 		});
 		await ctx.reply(`Отлично! Вы были привязаны к этому запросу о помощи`);
 	}
+
+	@Hears('Моя помощь')
+	async getUsersHelp(ctx: Context) {
+		//@ts-ignore
+		const username = ctx.update.message.from.username;
+		console.log(username);
+		const helpRequests = await this.helpRequestsService.findMany({
+			where: {
+				volunteerTg: username,
+			},
+		});
+		const requestsTable = helpRequests.map(
+			(request, index) => `${index}. ${request.title} | ${request.status}`,
+		);
+		if (requestsTable.length == 0) {
+			ctx.reply('Вы ещё не оказывали помощь в нашем сервисе');
+			return;
+		}
+		ctx.reply(requestsTable.join('\n'));
+	}
 }

@@ -1,10 +1,15 @@
 import { Markup } from 'telegraf';
 
 export function actionButtons() {
-	return Markup.keyboard([
-		Markup.button.callback('Запросы о помощи', 'get_request'),
-		// Markup.button.callback('Уже помогаю', 'get_request'),
-	]);
+	return Markup.keyboard(
+		[
+			Markup.button.callback('Запросы о помощи', 'get_request'),
+			Markup.button.callback('Моя помощь', 'get_user_request'),
+		],
+		{
+			columns: 2,
+		},
+	);
 }
 
 export function helpRequestButtons() {
