@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { HelpRequestStatus, HelpRequestType } from '@prisma/client';
 
 export class HelpRequestDto {
@@ -23,12 +23,13 @@ export class HelpRequestDto {
 	})
 	requesterId: number;
 
-	@ApiProperty({
-		description: 'ID of the volunteer who accepted the request (if any)',
+	@ApiPropertyOptional({
+		description:
+			'Telegram username of the volunteer who accepted the request (if any)',
 		example: 2,
 		required: false,
 	})
-	volunteerId?: number;
+	volunteerTg?: string;
 
 	@ApiProperty({
 		description: 'Current status of the help request',
