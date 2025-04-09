@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { HelpRequestType } from '@prisma/client';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateHelpRequestDto {
 	@ApiProperty()
@@ -20,5 +20,6 @@ export class CreateHelpRequestDto {
 		description: 'Initial type of the help request',
 		enum: HelpRequestType,
 	})
+	@IsEnum(HelpRequestType)
 	type: HelpRequestType;
 }

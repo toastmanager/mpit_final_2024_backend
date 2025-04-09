@@ -91,7 +91,11 @@ export class ArticlesController {
 		isArray: true,
 	})
 	async findAll() {
-		const articles = await this.articlesService.findMany();
+		const articles = await this.articlesService.findMany({
+			orderBy: {
+				createdAt: 'desc',
+			},
+		});
 		const articleDtos = await this.articlesService.getArticleDtos(articles);
 		return articleDtos;
 	}
