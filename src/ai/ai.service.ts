@@ -11,7 +11,7 @@ export class AiService implements OnModuleInit {
 
 	constructor(readonly aiConfig: AiConfig) {
 		this.llm = new ChatTogetherAI({
-			model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
+			model: 'meta-llama/Llama-Vision-Free',
 			temperature: 0,
 			maxRetries: 2,
 			apiKey: aiConfig.apiKey,

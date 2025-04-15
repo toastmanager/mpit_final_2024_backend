@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Article, Prisma } from '@prisma/client';
 import { ArticleDto } from './dto/article.dto';
 import { AiService } from '../ai/ai.service';
 import { UsersService } from '../users/users.service';
 import { ArticleBannersStorage } from './article-banners.storage';
+import { UpdateArticleDto } from './dto/update-article.dto';
+import { CreateArticleDto } from './dto/create-article.dto';
+import { createSlug } from '../utils';
 
 @Injectable()
 export class ArticlesService {
@@ -166,5 +169,59 @@ export class ArticlesService {
 		});
 
 		return article.views;
+	}
+
+	async updateWithEmbedding(args: {
+		where: Prisma.ArticleWhereUniqueInput;
+		data: Prisma.ArticleUpdateInput;
+	}): Promise<Article> {
+		const { where, data } = args;
+
+		const article = await this.update({
+			where: where,
+			data: data,
+		});
+
+		await this.updateEmbedding({
+			articleId: article.id,
+			text: article.text,
+			title: article.title,
+		});
+
+		return article;
+	}
+
+	async createWithEmbedding(args: {
+		data: Prisma.ArticleCreateInput;
+	}): Promise<Article> {
+		const { data } = args;
+
+		const article = await this.create({
+			data: data,
+		});
+
+		const articleEmbedding = await this.createEmbedding({
+			data: {
+				article: {
+					connect: {
+						id: article.id,
+					},
+				},
+			},
+		});
+
+		if (!articleEmbedding) {
+			throw new InternalServerErrorException(
+				'Failed to create embedding for article',
+			);
+		}
+
+		await this.updateEmbedding({
+			articleId: article.id,
+			title: article.text,
+			text: article.text,
+		});
+
+		return article;
 	}
 }

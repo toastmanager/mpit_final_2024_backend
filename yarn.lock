@@ -1753,6 +1753,11 @@
   dependencies:
     js-tiktoken "^1.0.12"
 
+"@langchain/yandex@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@langchain/yandex/-/yandex-0.1.0.tgz#5aaae961bfd65b2516626433389ae81362a589a3"
+  integrity sha512-o2ji7b6v5ib247mpwQLSSAlIeTjqK7HOZFkEdvH6BoO7Dq9A8l8n8FUwpZSNdN1L5hw1M2lzz5N7AfW7GSO7lQ==
+
 "@lukeed/csprng@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@lukeed/csprng/-/csprng-1.1.0.tgz#1e3e4bd05c1cc7a0b2ddbd8a03f39f6e4b5e6cfe"

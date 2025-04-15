@@ -43,42 +43,20 @@ export class ArticlesController {
 	})
 	async create(
 		@Request() req: any,
-		@Body() CreateArticleDto: CreateArticleDto,
+		@Body() createArticleDto: CreateArticleDto,
 	) {
 		const { user } = req;
 
-		const article = await this.articlesService.create({
+		const article = await this.articlesService.createWithEmbedding({
 			data: {
-				...CreateArticleDto,
+				...createArticleDto,
 				author: {
 					connect: {
 						id: +user.sub,
 					},
 				},
-				slug: createSlug(CreateArticleDto.title),
+				slug: createSlug(createArticleDto.title),
 			},
-		});
-
-		const articleEmbedding = await this.articlesService.createEmbedding({
-			data: {
-				article: {
-					connect: {
-						id: article.id,
-					},
-				},
-			},
-		});
-
-		if (!articleEmbedding) {
-			throw new InternalServerErrorException(
-				'Failed to create embedding for article',
-			);
-		}
-
-		await this.articlesService.updateEmbedding({
-			articleId: article.id,
-			title: article.text,
-			text: article.text,
 		});
 
 		const articleDto = await this.articlesService.getArticleDto(article);
@@ -128,19 +106,12 @@ export class ArticlesController {
 		@Param('id') id: string,
 		@Body() updateArticlesDto: UpdateArticleDto,
 	) {
-		const article = await this.articlesService.update({
+		const article = await this.articlesService.updateWithEmbedding({
 			where: {
 				id: +id,
 			},
 			data: updateArticlesDto,
 		});
-
-		await this.articlesService.updateEmbedding({
-			articleId: article.id,
-			text: article.text,
-			title: article.title,
-		});
-
 		const articleDto = await this.articlesService.getArticleDto(article);
 		return articleDto;
 	}
